@@ -1,0 +1,33 @@
+{
+  "name": "onlyhub",
+  "version": "1.0.0",
+  "description": "video stream ",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node ./dist/index.js",
+    "dev": "nodemon ./dist/index.js",
+    "watch": "tsc -w",
+    "build": "tsc"
+  },
+  "keywords": [
+    "backend",
+    "video",
+    "stream"
+  ],
+  "author": "Nikhil Kumar",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "mongoose": "^8.7.2",
+    "winston": "^3.15.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "nodemon": "^3.1.7",
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.3"
+  }
+}
