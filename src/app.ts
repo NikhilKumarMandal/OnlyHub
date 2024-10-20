@@ -3,19 +3,24 @@ import logger from "./utils/logger.js";
 import morgan from "morgan";
 import cookieParser from "cookie-parser"
 import cors from "cors"
+import userRouter from "./routes/user.route.js"
 
 const app: Application = express()
 const morganFormat = ":method :url :status :response-time ms";
 
 app.use(express.json({ limit: "16kb" }));
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true, limit: "200kb"}))
 
 app.use(cookieParser());
 
 app.use(cors({
     origin: "*"
 }));
+
+console.log("Hello");
+
+app.use("/api/v1/users", userRouter)
 
 app.use(
   morgan(morganFormat, {
@@ -32,5 +37,7 @@ app.use(
     },
   })
 );
+
+
 
 export {app};
