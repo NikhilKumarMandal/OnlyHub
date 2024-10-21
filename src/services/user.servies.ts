@@ -1,6 +1,7 @@
 import { UserData } from "../types/type.js";
 import { User, IUser } from "../models/auth.model.js";
 import bcrypt from "bcryptjs";
+import { ApiError } from "../utils/ApiError.js";
 
 export class UserService {
     async create({ username, email, password }: UserData): Promise<IUser> {
@@ -10,7 +11,7 @@ export class UserService {
         });
 
         if (existingUser) {
-            throw new Error("User already exists with this email or username.");
+            throw new ApiError(409,"User with email or username already exists")
         }
 
         const saltRound = 10;
@@ -27,7 +28,7 @@ export class UserService {
         const createdUser = await User.findById(savedUser._id).select("-password")
 
         if (!createdUser) {
-            throw new Error("Failed to create user.");
+            throw new ApiError(500,"Failed to create user.");
         }
 
         return createdUser;

@@ -5,6 +5,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { Request,Response } from "express";
 import { CookieOptions } from "express"
 import jwt, { JwtPayload } from "jsonwebtoken"
+import { ApiResponse } from '../utils/ApiResponse.js';
 
 
 export class UserController{
@@ -26,7 +27,12 @@ export class UserController{
 
         this.logger.info(`User is created successfully!`,{id: user._id})
 
-        res.status(200).json({user})
+        res.status(200).json(
+            new ApiResponse(
+                200,
+                user,
+                "User register successfully"
+            ))
     })
 
     login = asyncHandler(async (req, res) => {
@@ -128,10 +134,11 @@ genrateRefreshAccessToken = asyncHandler(async (req, res) => {
             .status(200)
             .cookie("accessToken", accessToken, accessCookie)
             .cookie("refreshToken", newRefreshToken, refreshCookie)
-            .json({
-                msg: "Tokens refreshed successfully",
-                user: { id: user._id }
-            });
+            .json(
+                new ApiResponse(
+                    201,
+                    { accessToken, refreshToken: newRefreshToken }, "Access token refreshed"
+                ));
         
     } catch (error) {
         console.error("Error during token verification:", error);
@@ -161,9 +168,7 @@ genrateRefreshAccessToken = asyncHandler(async (req, res) => {
             .status(200)
             .clearCookie("accessToken", accessCookie)
             .clearCookie("refreshToken", refreshCookie)
-            .json({
-                msg: "User logout successfully",
-            })
+            .json(new ApiResponse(200,{},"User logout successfully"))
     })
 
 
