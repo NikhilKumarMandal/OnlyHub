@@ -32,4 +32,16 @@ export class UserService {
 
         return createdUser;
     }
+
+    async findById(userId: string): Promise<IUser | null> {
+        return User.findById(userId).select("-password -refreshToken").exec();
+    }
+
+    async findEmail(email: string): Promise<IUser | null>{
+        return User.findOne({ email });
+    }
+
+    async comparePassword(password: string, hashedPassword: string) {
+        return await bcrypt.compare(password,hashedPassword)
+    }
 }

@@ -4,6 +4,7 @@ export interface IUser extends Document {
     username: string;
     email: string;
     password: string;
+    refreshToken?: string
     generateAccessToken: () => Promise<string>; 
     generateRefreshToken: () => Promise<string>;
 }
@@ -30,6 +31,9 @@ const userSchema = new mongoose.Schema({
         required: [true,"Password is requried!"]
     },
     avatar: {
+        type: String
+    },
+    refreshToken: {
         type: String
     }
     },

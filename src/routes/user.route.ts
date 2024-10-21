@@ -8,7 +8,8 @@ const router = Router();
 const userService = new UserService() 
 const userController = new UserController(userService,logger)
 
-router.post("/register", userController.create.bind(userController));
+router.post("/register", userController.create);
+router.post("/login", userController.login.bind(userController));
 
 
 export default router;

@@ -18,7 +18,6 @@ app.use(cors({
     origin: "*"
 }));
 
-console.log("Hello");
 
 app.use("/api/v1/users", userRouter)
 
