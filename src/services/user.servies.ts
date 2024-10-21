@@ -44,4 +44,18 @@ export class UserService {
     async comparePassword(password: string, hashedPassword: string) {
         return await bcrypt.compare(password,hashedPassword)
     }
+
+    async findByIdAndUpdated(userId:string,number: number) {
+        return (await User.findByIdAndUpdate(
+            { _id: userId },
+            {
+                $unset: {
+                    refreshToken: number
+                }
+            },
+            {
+                new : true    
+            }
+        ))
+    }
 }

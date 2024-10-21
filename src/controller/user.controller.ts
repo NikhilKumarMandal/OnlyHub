@@ -137,7 +137,34 @@ genrateRefreshAccessToken = asyncHandler(async (req, res) => {
         console.error("Error during token verification:", error);
         throw new Error("Something went wrong while generating the refresh token!");
     }
-});
+    });
+    
+    
+    logout = asyncHandler(async (req, res) => {
+        await this.userService.findByIdAndUpdated(req.user._id as string, 1)
+        
+        const accessCookie: CookieOptions = {
+            domain: "localhost",
+            sameSite: "strict",
+            httpOnly: true,
+        };
+
+        const refreshCookie: CookieOptions = {
+            domain: "localhost",
+            sameSite: "strict",
+            httpOnly: true,
+        };
+
+        this.logger.info("User logout successfully!!")
+
+        res
+            .status(200)
+            .clearCookie("accessToken", accessCookie)
+            .clearCookie("refreshToken", refreshCookie)
+            .json({
+                msg: "User logout successfully",
+            })
+    })
 
 
 }
