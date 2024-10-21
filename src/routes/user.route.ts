@@ -9,7 +9,9 @@ const userService = new UserService()
 const userController = new UserController(userService,logger)
 
 router.post("/register", userController.create);
-router.post("/login", userController.login.bind(userController));
+router.post("/login", userController.login);
+router.post("/refresh-token", userController.genrateRefreshAccessToken.bind(userController));
+
 
 
 export default router;

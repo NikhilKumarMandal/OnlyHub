@@ -34,7 +34,7 @@ export class UserService {
     }
 
     async findById(userId: string): Promise<IUser | null> {
-        return User.findById(userId).select("-password -refreshToken").exec();
+        return User.findById(userId).select("-password").exec();
     }
 
     async findEmail(email: string): Promise<IUser | null>{

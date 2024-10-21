@@ -4,6 +4,7 @@ import { UserService } from "../services/user.servies.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Request,Response } from "express";
 import { CookieOptions } from "express"
+import jwt, { JwtPayload } from "jsonwebtoken"
 
 
 export class UserController{
@@ -80,4 +81,63 @@ export class UserController{
         
 
     })
+
+genrateRefreshAccessToken = asyncHandler(async (req, res) => {
+    const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
+
+    if (!incomingRefreshToken) {
+        throw new Error("Unauthorized request");
+    }
+
+    try {
+
+        const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECERT as string);
+
+        const userId = (decodedToken as JwtPayload).id;
+        
+        if (!userId) {
+            throw new Error("Invalid token payload");
+        }
+
+        const user = await this.userService.findById(userId as string);
+        if (!user) {
+            throw new Error("User does not exist!");
+        }
+
+        if (incomingRefreshToken !== user?.refreshToken) {
+            throw new Error("Refresh token is expired or invalid");
+        }
+
+        const { accessToken, refreshToken: newRefreshToken } = await genarateAccessTokenAndRefreshToken(user._id as string);
+        
+        const accessCookie: CookieOptions = {
+            domain: "localhost",
+            sameSite: "strict",
+            maxAge: 1000 * 60 * 60, // 1 hour
+            httpOnly: true,
+        };
+
+        const refreshCookie: CookieOptions = {
+            domain: "localhost",
+            sameSite: "strict",
+            maxAge: 1000 * 60 * 60 * 24 * 10, // 10 days
+            httpOnly: true,
+        };
+
+        res
+            .status(200)
+            .cookie("accessToken", accessToken, accessCookie)
+            .cookie("refreshToken", newRefreshToken, refreshCookie)
+            .json({
+                msg: "Tokens refreshed successfully",
+                user: { id: user._id }
+            });
+        
+    } catch (error) {
+        console.error("Error during token verification:", error);
+        throw new Error("Something went wrong while generating the refresh token!");
+    }
+});
+
+
 }

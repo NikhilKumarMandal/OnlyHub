@@ -4,7 +4,7 @@ export interface IUser extends Document {
     username: string;
     email: string;
     password: string;
-    refreshToken?: string
+    refreshToken: string
     generateAccessToken: () => Promise<string>; 
     generateRefreshToken: () => Promise<string>;
 }
@@ -43,23 +43,21 @@ const userSchema = new mongoose.Schema({
 )
 
 userSchema.methods.generateAccessToken = async function (): Promise<string> {
-    const token = jwt.sign({
+    return jwt.sign({
         id: this._id
     }, process.env.ACCESS_TOKEN_SECERT,
     {
         expiresIn: process.env.ACCESS_TOKEN_EXPIRY
     });
-    return token;
 };
 
 userSchema.methods.generateRefreshToken = async function (): Promise<string> {
-    const token = jwt.sign({
+    return jwt.sign({
         id: this._id
     }, process.env.REFRESH_TOKEN_SECERT,
     {
         expiresIn: process.env.REFRESH_TOKEN_EXPIRY
     });
-    return token;
 };
 
 export const User = mongoose.model<IUser>("User", userSchema);
