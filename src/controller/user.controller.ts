@@ -194,5 +194,21 @@ export class UserController{
             ))
     })
 
+    getWatchHistory = asyncHandler(async (req, res) => {
+        
+        const user = this.userService.getWatchHistory(req.user?._id as string);
+
+        if (!user) {
+            throw new ApiError(404,"User not found")
+        }
+
+        res.status(200).json(
+            new ApiResponse(
+                200,
+                user[0].watchHistory,
+                "Watch histiry fected successfully"
+            ))
+    })
+
 
 }

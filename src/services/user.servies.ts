@@ -3,6 +3,7 @@ import { User, IUser } from "../models/auth.model.js";
 import bcrypt from "bcryptjs";
 import { ApiError } from "../utils/ApiError.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import mongoose from "mongoose";
 
 export class UserService {
 
@@ -112,6 +113,47 @@ export class UserService {
                     channelsSubscribedToCount: 1,
                     isSubscribed: 1,
                 }
+            }
+        ])
+    }
+
+    async getWatchHistory(userId:string) {
+        return await User.aggregate([
+            {
+                $match: {
+                    _id: new mongoose.Types.ObjectId(userId)
+                }
+            },
+            {
+                $lookup: {
+                    from: "videos",
+                    localField: "watchHistory",
+                    foreignField: "_id",
+                    as: "watchHistory",
+                    pipeline: [
+                        {
+                            $lookup: {
+                                from: "users",
+                                localField: "_id",
+                                foreignField: "_id",
+                                as: "owner",
+                                pipeline: [
+                                    {
+                                        $project: {
+                                            username: 1,
+                                            avatar:1
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            $addFields: {
+                                $first: "$owner"
+                            }
+                        }
+                    ]
+                },
             }
         ])
     }
