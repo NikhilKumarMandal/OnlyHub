@@ -6,6 +6,7 @@ import { Request,Response } from "express";
 import { CookieOptions } from "express"
 import jwt, { JwtPayload } from "jsonwebtoken"
 import { ApiResponse } from '../utils/ApiResponse.js';
+import { ApiError } from '../utils/ApiError.js';
 
 
 export class UserController{
@@ -40,24 +41,24 @@ export class UserController{
         const { email, password } = req.body;
 
         if (!email) {
-            throw new Error("Email is requried")
+            throw new ApiError(409,"Email is requried")
         };
 
         const user = await this.userService.findEmail(email);
         if (!user) {
-            throw new Error("User does not found!")
+            throw new ApiError(409,"User does not found!")
         };
 
         const isPasswordMatch = await this.userService.comparePassword(password, user.password);
         if (!isPasswordMatch) {
-            throw new Error("Emai or Password does not match!")
+            throw new ApiError(409,"Emai or Password does not match!")
         }
 
         const { accessToken, refreshToken } = await genarateAccessTokenAndRefreshToken(user._id as string);
 
         const loggedInUser = await this.userService.findById(user._id as string);
         if (!loggedInUser) {
-        throw new Error("Failed to retrieve user data!")
+        throw new ApiError(409,"Failed to retrieve user data!")
         }
 
         this.logger.info("User Login successfully")
@@ -80,19 +81,21 @@ export class UserController{
             .status(200)
             .cookie("accessToken", accessToken, accessCookie)
             .cookie("refreshToken", refreshToken, refreshCookie)
-            .json({
-                msg: "User Login successfully",
-                loggedInUser: {emai: loggedInUser.email}
-        })
+            .json(
+                new ApiResponse(
+                    200,
+                    loggedInUser,
+                    "User LoggedIn successfully"
+                ))
         
 
     })
 
-genrateRefreshAccessToken = asyncHandler(async (req, res) => {
+    genrateRefreshAccessToken = asyncHandler(async (req, res) => {
     const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
 
     if (!incomingRefreshToken) {
-        throw new Error("Unauthorized request");
+        throw new ApiError(401,"Unauthorized request");
     }
 
     try {
@@ -102,16 +105,16 @@ genrateRefreshAccessToken = asyncHandler(async (req, res) => {
         const userId = (decodedToken as JwtPayload).id;
         
         if (!userId) {
-            throw new Error("Invalid token payload");
+            throw new ApiError(409,"Invalid token payload");
         }
 
         const user = await this.userService.findById(userId as string);
         if (!user) {
-            throw new Error("User does not exist!");
+            throw new ApiError(409,"User does not exist!");
         }
 
         if (incomingRefreshToken !== user?.refreshToken) {
-            throw new Error("Refresh token is expired or invalid");
+            throw new ApiError(409,"Refresh token is expired or invalid");
         }
 
         const { accessToken, refreshToken: newRefreshToken } = await genarateAccessTokenAndRefreshToken(user._id as string);
@@ -141,8 +144,7 @@ genrateRefreshAccessToken = asyncHandler(async (req, res) => {
                 ));
         
     } catch (error) {
-        console.error("Error during token verification:", error);
-        throw new Error("Something went wrong while generating the refresh token!");
+        throw new ApiError(500,"Something went wrong while generating the refresh token!");
     }
     });
     
