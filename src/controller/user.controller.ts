@@ -173,5 +173,26 @@ export class UserController{
             .json(new ApiResponse(200,{},"User logout successfully"))
     })
 
+    getUserChannelProfile = asyncHandler(async (req, res) => {
+        const { username } = req.params
+
+        if (!username?.trim()) {
+        throw new ApiError(400, "username is missing")
+        }
+
+        const channel = await this.userService.getUserData(username,req.user?._id as string);
+
+        if (!channel.length) {
+            throw new ApiError(404,"Channel not found")
+        }
+
+        res.status(200).json(
+            new ApiResponse(
+                200,
+                channel[0],
+                "Channel profile fected successfully"
+            ))
+    })
+
 
 }
