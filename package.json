@@ -19,6 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.5.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -26,6 +27,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.7.2",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^10.0.0",
     "winston": "^3.15.0"
   },
   "devDependencies": {
@@ -35,6 +38,8 @@
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/morgan": "^1.9.9",
+    "@types/multer": "^1.4.12",
+    "@types/uuid": "^10.0.0",
     "nodemon": "^3.1.7",
     "prettier": "^3.3.3",
     "typescript": "^5.6.3"
