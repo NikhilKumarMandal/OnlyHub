@@ -1,4 +1,4 @@
-import mongoose, { Document } from "mongoose";
+import mongoose, { Document,Schema } from "mongoose";
 import jwt from "jsonwebtoken"
 export interface IUser extends Document {
     username: string;
@@ -9,7 +9,7 @@ export interface IUser extends Document {
     generateRefreshToken: () => Promise<string>;
 }
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
     username: {
         type: String,
         required: true,
@@ -32,7 +32,15 @@ const userSchema = new mongoose.Schema({
     },
     avatar: {
         type: String
+    },coverImage: {
+        type: String, // cloudinary url
     },
+    watchHistory: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Video"
+        }
+    ],
     refreshToken: {
         type: String
     }
