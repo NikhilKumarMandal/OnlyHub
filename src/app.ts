@@ -4,13 +4,15 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser"
 import cors from "cors"
 import userRouter from "./routes/user.route.js"
+import videoRouter from "./routes/video.route.js"
+
 
 const app: Application = express()
 const morganFormat = ":method :url :status :response-time ms";
 
-app.use(express.json({ limit: "16kb" }));
+app.use(express.json());
 
-app.use(express.urlencoded({extended: true, limit: "200kb"}))
+app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 
@@ -19,7 +21,9 @@ app.use(cors({
 }));
 
 
-app.use("/api/v1/users", userRouter)
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/videos", videoRouter);
+
 
 app.use(
   morgan(morganFormat, {

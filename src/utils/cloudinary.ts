@@ -1,54 +1,63 @@
 import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 import fs from "fs";
+import logger from "./logger.js";
 
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || "",
-  api_key: process.env.CLOUDINARY_API_KEY || "",
-  api_secret: process.env.CLOUDINARY_API_SECRET || "",
+
+
+cloudinary.config({ 
+    cloud_name: 'dfnbvscob', 
+    api_key: '332287963247526', 
+    api_secret: 'bz4ES2JEgFlAPcmqPMg_03kbVlQ' 
 });
+  
 
-const uploadOnCloudinary = async (
-  localFilePath: string
-): Promise<UploadApiResponse | null> => {
-  try {
-    if (!localFilePath) return null;
-    const response = await cloudinary.uploader.upload(localFilePath, {
-      resource_type: "auto",
-    });
+const uploadOnCloudinary = async (localFilePath: string): Promise<UploadApiResponse | null> => {
+    try {
+        if (!localFilePath) return null;
+        const response = await cloudinary.uploader.upload(localFilePath, {
+            resource_type: "auto"
+        });
+        
+        fs.unlinkSync(localFilePath);
+        return response;
 
-    fs.unlinkSync(localFilePath);
-    return response;
-  } catch (error) {
-    fs.unlinkSync(localFilePath); 
-    console.error("Upload failed:", (error as Error)?.message);
-    return null;
-  }
-};
-
-const deleteFromCloudinary = async (
-  public_id: string,
-  resource_type: "image" | "video"
-): Promise<UploadApiResponse | null> => {
-  try {
-    if (!public_id) {
-      console.error("Missing publicId");
-      return null;
+    } catch (error) {
+        fs.unlinkSync(localFilePath);
+        if (error instanceof Error) {
+            logger.error(error.message)
+        }
+        return null;
     }
-
-    const response = await cloudinary.uploader.destroy(public_id, {
-      invalidate: true,
-      resource_type: resource_type,
-    });
-
-    console.log(response);
-    console.log("File deleted successfully");
-
-    return response;
-  } catch (error) {
-    console.error("Delete failed:", (error as Error)?.message);
-    return null;
-  }
 };
 
-export { uploadOnCloudinary, deleteFromCloudinary };
+const deleteFromCloudinary = async (public_id: string, resource_type: "image" | "video"): Promise<UploadApiResponse | null> => {
+    try {
+        if (!public_id) {
+            return null;
+        }
+
+        // Delete from Cloudinary
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const response = await cloudinary.uploader.destroy(public_id, {
+            invalidate: true,
+            resource_type
+        });
+
+
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return response;
+    } catch (error) {
+        if (error instanceof Error) {
+            logger.error(error.message)
+        }
+        return null;
+    }
+};
+
+export { 
+    uploadOnCloudinary, 
+    deleteFromCloudinary 
+};
+

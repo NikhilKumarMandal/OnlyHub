@@ -53,7 +53,7 @@ const userSchema = new Schema({
 userSchema.methods.generateAccessToken = async function (): Promise<string> {
     return jwt.sign({
         id: this._id
-    }, process.env.ACCESS_TOKEN_SECERT,
+    }, process.env.ACCESS_TOKEN_SECERT!,
     {
         expiresIn: process.env.ACCESS_TOKEN_EXPIRY
     });
@@ -62,7 +62,7 @@ userSchema.methods.generateAccessToken = async function (): Promise<string> {
 userSchema.methods.generateRefreshToken = async function (): Promise<string> {
     return jwt.sign({
         id: this._id
-    }, process.env.REFRESH_TOKEN_SECERT,
+    }, process.env.REFRESH_TOKEN_SECERT!,
     {
         expiresIn: process.env.REFRESH_TOKEN_EXPIRY
     });

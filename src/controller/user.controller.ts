@@ -150,7 +150,7 @@ export class UserController{
     
     
     logout = asyncHandler(async (req, res) => {
-        await this.userService.findByIdAndUpdated(req.user._id as string, 1)
+        await this.userService.findByIdAndUpdated(req.user?._id as string, 1)
         
         const accessCookie: CookieOptions = {
             domain: "localhost",
@@ -196,7 +196,7 @@ export class UserController{
 
     getWatchHistory = asyncHandler(async (req, res) => {
         
-        const user = this.userService.getWatchHistory(req.user?._id as string);
+        const user = await this.userService.getWatchHistory(req.user?._id as string);
 
         if (!user) {
             throw new ApiError(404,"User not found")
@@ -205,7 +205,7 @@ export class UserController{
         res.status(200).json(
             new ApiResponse(
                 200,
-                user[0].watchHistory,
+                user[0]?.watchHistory,
                 "Watch histiry fected successfully"
             ))
     })

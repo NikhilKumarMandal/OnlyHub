@@ -13,7 +13,7 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
             throw new Error("Token does not found!")
         }
     
-        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECERT);
+        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECERT!);
     
         const userId = (decodedToken as JwtPayload).id;
             

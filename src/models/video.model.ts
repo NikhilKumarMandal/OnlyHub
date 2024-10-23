@@ -3,7 +3,10 @@ import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 export interface IVideo extends Document {
     videoFile: string; 
-    thumbnail: string; 
+    thumbnail: {
+        public_id: string,
+        url:string
+    }; 
     title: string; 
     description: string; 
     duration: number;
@@ -19,8 +22,14 @@ const videoSchema = new Schema(
             required: true
         },
         thumbnail: {
-            type: String, // Cloudinary URL
-            required: true
+            public_id: {
+                type: String,
+                required: true
+            },
+            url: {
+                type: String,
+                required: true
+            }
         },
         title: {
             type: String, 
@@ -32,7 +41,6 @@ const videoSchema = new Schema(
         },
         duration: {
             type: Number, 
-            required: true
         },
         views: {
             type: Number,
