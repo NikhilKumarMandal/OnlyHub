@@ -11,5 +11,6 @@ const tweetService = new TweetService()
 const tweetController = new TweetController(tweetService,logger)
 
 router.post("/create-tweet",tweetController.createTweet)
+router.get("/user-tweet",tweetController.getUserTweets)
 
 export default router
