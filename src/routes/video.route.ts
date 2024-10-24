@@ -53,6 +53,11 @@ router.get(
     videoController.getVideoById
 )
 
+router.post(
+    "/:id",
+    verifyJWT,
+    videoController.togglePublishStatus
+)
 
 
 export default router;

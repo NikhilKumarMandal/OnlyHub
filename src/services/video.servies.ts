@@ -46,4 +46,14 @@ export class VideoService{
         }
         return await Video.findById(videoId)
     }
+
+    async togglePublishStatus(videoId: string) {
+        if (!isValidObjectId(videoId)) {
+            throw new ApiError(400,"This is not a valid id:")
+        }
+
+        const video = await Video.findById(videoId);
+        video.isPublished = !video.isPublished;
+        return await video.save()
+    }
 }

@@ -126,4 +126,12 @@ export class VideoController{
 
     })
 
+    togglePublishStatus = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+
+        const toggle = await this.videoService.togglePublishStatus(id);
+
+        res.status(200).json(new ApiResponse(200,toggle,"Video toggle successfully"))
+    })
+
 }
