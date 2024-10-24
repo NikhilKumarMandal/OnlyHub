@@ -7,9 +7,6 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
 
 
-
-
-
 export class VideoController{
 
     constructor(
@@ -63,4 +60,48 @@ export class VideoController{
         
         res.status(200).json(new ApiResponse(200, uploadedVideo, "Video is uploaded successfully"));
     })
+
+    updateVideo = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    if (!id) {
+        throw new ApiError(400, "Video ID is required");
+    }
+
+    const { title, description } = req.body;
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+    const thumbnailLocalPath = files?.thumbnail?.[0]?.path;
+    if (!thumbnailLocalPath) {
+        throw new ApiError(400, "Thumbnail image is required");
+    }
+
+    const thumbnail = await uploadOnCloudinary(thumbnailLocalPath);
+    if (!thumbnail) {
+        throw new ApiError(400, "Thumbnail upload failed");
+    }
+
+    const videoDetails = {
+        title,
+        description,
+        thumbnail: {
+            public_id: thumbnail.public_id,
+            url: thumbnail.url,
+        },
+    };
+
+
+    const updatedVideo = await this.videoService.update(id, videoDetails); 
+
+    if (!updatedVideo) {
+        throw new ApiError(404, "Video not found or update failed");
+    }
+
+    this.logger.info("Video updated successfully", { _id: updatedVideo?.title });
+
+    res.status(200).json(
+        new ApiResponse(200, updatedVideo, "Video updated successfully")
+    );
+    });
+
 }

@@ -22,3 +22,12 @@ export interface VideoData {
     duration?: number;    
     owner?:string;
 }
+
+export interface UpdateVideoData{
+    title: string,
+    description: string,
+    thumbnail: {
+        public_id: string,
+        url: string
+    }
+}

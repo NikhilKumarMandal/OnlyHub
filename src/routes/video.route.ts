@@ -29,6 +29,18 @@ router.post(
     videoController.pulishAVideo
 )
 
+router.post(
+    "/video-update/:id",
+    verifyJWT,
+    upload.fields([
+        {
+            name: "thumbnail",
+            maxCount: 1,
+        },      
+    ]),
+    videoController.updateVideo
+)
+
 
 
 export default router;
