@@ -41,3 +41,9 @@ export interface ITweet{
     content: string;
     owner: string
 }
+
+export interface IComment{
+    content: string;
+    video: string;
+    owner: string;
+}
