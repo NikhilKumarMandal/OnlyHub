@@ -3,8 +3,9 @@ import logger from "./utils/logger.js";
 import morgan from "morgan";
 import cookieParser from "cookie-parser"
 import cors from "cors"
-import userRouter from "./routes/user.route.js"
-import videoRouter from "./routes/video.route.js"
+import userRouter from "./routes/user.routes.js"
+import videoRouter from "./routes/video.routes.js"
+import tweetRouter from "./routes/tweet.routes.js"
 
 
 const app: Application = express()
@@ -23,6 +24,7 @@ app.use(cors({
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/videos", videoRouter);
+app.use("/api/v1/tweet",tweetRouter );
 
 
 app.use(

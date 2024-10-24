@@ -1,6 +1,6 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt, { JwtPayload } from "jsonwebtoken"
-import { UserService } from "../services/user.servies.js";
+import { UserService } from "../services/user.services.js";
 
 
 const userService = new UserService()

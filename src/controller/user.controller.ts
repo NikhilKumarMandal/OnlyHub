@@ -1,6 +1,6 @@
 import { genarateAccessTokenAndRefreshToken } from '../utils/genrateAccessTokenAndRefreshToken.js';
 import { Logger } from "winston";
-import { UserService } from "../services/user.servies.js";
+import { UserService } from "../services/user.services.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Request,Response } from "express";
 import { CookieOptions } from "express"

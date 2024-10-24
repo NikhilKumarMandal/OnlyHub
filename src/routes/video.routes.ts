@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
-import { VideoService } from "../services/video.servies.js";
+import { VideoService } from "../services/video.services.js";
 import { VideoController } from "../controller/video.controller.js";
 import logger from "../utils/logger.js";
 

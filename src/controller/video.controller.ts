@@ -1,5 +1,5 @@
 import { Logger } from "winston"
-import { VideoService } from "../services/video.servies.js"
+import { VideoService } from "../services/video.services.js"
 import { VideoData } from "../types/type.js"
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"

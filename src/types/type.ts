@@ -36,3 +36,8 @@ export interface PaginateQuery {
     page: number;
     limit: number;
 }
+
+export interface ITweet{
+    content: string;
+    owner: string
+}

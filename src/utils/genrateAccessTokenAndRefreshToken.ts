@@ -1,4 +1,4 @@
-import { UserService } from "../services/user.servies.js";
+import { UserService } from "../services/user.services.js";
 import { ApiError } from "./ApiError.js";
 
 
