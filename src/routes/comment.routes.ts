@@ -12,6 +12,7 @@ const commentService = new CommentService
 const commentController = new CommentController(commentService,logger)
 
 router.post("/add-comment/:id",commentController.addComment)
+router.patch("/update-comment/:id",commentController.updateComment)
 
 
 export default router

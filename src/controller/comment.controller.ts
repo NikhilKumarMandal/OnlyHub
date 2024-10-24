@@ -50,4 +50,27 @@ export class CommentController{
                 "Comment add successfully"
             ))
     })
+
+    updateComment = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+
+        const { content } = req.body;
+
+        if (!isValidObjectId(id)) {
+            throw new ApiError(400,"This is not a valid id:")
+        }
+        
+        if (!content) {
+            throw new ApiError(400,"Content is requried!")
+        }
+        
+        const comment = await this.commentService.update(id, content)
+        
+        res.status(200).json(
+            new ApiResponse(
+                200,
+                comment,
+                "Comment updated successfully"
+            ))
+    })
 }
