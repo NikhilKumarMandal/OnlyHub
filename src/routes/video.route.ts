@@ -8,7 +8,6 @@ import logger from "../utils/logger.js";
 
 
 const router = Router();
-router.use(verifyJWT);
 
 const videoService = new VideoService();
 const videoController = new VideoController(videoService,logger)
@@ -48,6 +47,11 @@ router.delete(
 )
 
 router.get(
+    "/all-video",
+    videoController.index
+)
+
+router.get(
     "/:id",
     verifyJWT,
     videoController.getVideoById
@@ -58,6 +62,8 @@ router.post(
     verifyJWT,
     videoController.togglePublishStatus
 )
+
+
 
 
 export default router;

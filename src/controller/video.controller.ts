@@ -14,6 +14,27 @@ export class VideoController{
         private logger: Logger
     ) { }
 
+    index = asyncHandler(async (req, res) => {
+    const { query = '', sortBy = 'createdAt', sortType = 'desc', userId } = req.query;
+
+    const videoData = await this.videoService.index(
+        query as string,
+        {
+            page: req.query.page ? parseInt(req.query.page as string) : 1,
+            limit: req.query.limit ? parseInt(req.query.limit as string) : 10,
+        },
+        sortBy as string,
+        sortType as string,
+        userId as string
+    );
+
+        res.status(200).json(
+            new ApiResponse(
+                200,
+                videoData, 
+                "Video fetched successfully"
+        ));
+    });
 
     pulishAVideo = asyncHandler(async (req, res) => {
         const { title, description } = req.body;

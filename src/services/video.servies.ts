@@ -1,7 +1,8 @@
+import { paginationLabels } from "../constant.js";
 import { Video } from "../models/video.model.js";
-import { UpdateVideoData, VideoData } from "../types/type.js";
+import { PaginateQuery, UpdateVideoData, VideoData } from "../types/type.js";
 import { ApiError } from "../utils/ApiError.js";
-import mongoose, {isValidObjectId} from "mongoose"
+import  mongoose, {isValidObjectId} from "mongoose"
 
 
 export class VideoService{
@@ -56,4 +57,56 @@ export class VideoService{
         video.isPublished = !video.isPublished;
         return await video.save()
     }
+
+    async index(
+    q: string,
+    paginateQuery: PaginateQuery,
+    sortBy: string = 'createdAt', 
+    sortType: string = 'desc', 
+    userId?: string 
+    ) {
+    const searchQueryRegexp = new RegExp(q, "i");
+
+    const aggregate = Video.aggregate([
+        {
+            $match: {
+                $or: [
+                    { title: searchQueryRegexp },
+                    { description: searchQueryRegexp }
+                ],
+                ...(userId && { owner: new mongoose.Types.ObjectId(userId) }) 
+            }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "owner",
+                foreignField: "_id",
+                as: "ownerDetails",
+                pipeline: [
+                    {
+                        $project: {
+                            username: 1,
+                            avatar: 1,
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $sort: {
+                [sortBy]: sortType === 'desc' ? -1 : 1
+            }
+        },
+        {
+            $unwind: "$ownerDetails"
+        }
+    ]);
+
+    return await Video.aggregatePaginate(aggregate, {
+        ...paginateQuery,
+        customLabels: paginationLabels 
+    });
+}
+
 }

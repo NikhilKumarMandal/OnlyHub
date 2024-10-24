@@ -31,3 +31,8 @@ export interface UpdateVideoData{
         url: string
     }
 }
+
+export interface PaginateQuery {
+    page: number;
+    limit: number;
+}

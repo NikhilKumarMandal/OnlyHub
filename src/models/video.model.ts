@@ -1,24 +1,12 @@
 import mongoose, { Schema, Document } from "mongoose";
-import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
+import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 
-export interface IVideo extends Document {
-    videoFile: string; 
-    thumbnail: {
-        public_id: string,
-        url:string
-    }; 
-    title: string; 
-    description: string; 
-    duration: number;
-    views: number; 
-    isPublished: boolean; 
-    owner?: mongoose.Types.ObjectId; 
-}
+
 
 const videoSchema = new Schema(
     {
         videoFile: {
-            type: String, // S3 bucket AWS
+            type: String, // S3 bucket AWS reference
             required: true
         },
         thumbnail: {
@@ -40,7 +28,8 @@ const videoSchema = new Schema(
             required: true
         },
         duration: {
-            type: Number, 
+            type: Number,
+            default: 0 
         },
         views: {
             type: Number,
@@ -61,6 +50,8 @@ const videoSchema = new Schema(
     }
 );
 
-videoSchema.plugin(mongooseAggregatePaginate);
 
-export const Video = mongoose.model<IVideo>("Video", videoSchema);
+videoSchema.plugin(aggregatePaginate);
+
+
+export const Video = mongoose.model("Video", videoSchema);
