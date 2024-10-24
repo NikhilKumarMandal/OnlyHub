@@ -41,6 +41,12 @@ router.post(
     videoController.updateVideo
 )
 
+router.delete(
+    "/video-delete/:id",
+    verifyJWT,
+    videoController.deleteVideo
+)
+
 
 
 export default router;

@@ -104,4 +104,12 @@ export class VideoController{
     );
     });
 
+    deleteVideo = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    await this.videoService.delete(id);
+    res.status(200).json(
+        new ApiResponse(200, {}, "Video deleted successfully")
+    );
+    })
+
 }

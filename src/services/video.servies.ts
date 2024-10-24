@@ -29,4 +29,14 @@ export class VideoService{
 
         return video;
     }
+
+    async delete(videoId: string) {
+    const deletedVideo = await Video.findByIdAndDelete(videoId);
+    
+    if (!deletedVideo) {
+        throw new ApiError(404, "Video not found");
+    }
+
+    return deletedVideo;
+    }
 }
