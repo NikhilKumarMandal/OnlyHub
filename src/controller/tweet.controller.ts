@@ -65,7 +65,19 @@ export class TweetController{
                 200,
                 updatedTweet,
                 "Tweet updated successfully"
+        ))        
+    })
+
+    deleteTweet = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+
+        await this.tweetService.delete(id)
+
+        res.status(200).json(
+            new ApiResponse(
+                200,
+                {},
+                "Tweet delete successfully!"
         ))
-        
     })
 }

@@ -18,7 +18,7 @@ export class TweetService{
         return await Tweet.find({ owner: userId });
     };
 
-    
+
     async update(tweetId: string,content:string) {
 
         if (!isValidObjectId(tweetId)) {
@@ -41,6 +41,14 @@ export class TweetService{
             throw new ApiError(500,"Somthing went wrong")
         }
         return tweet
+    }
+
+    async delete(tweetId: string) {
+        if (!isValidObjectId(tweetId)) {
+        throw new ApiError(400, `This is not a valid id: ${tweetId}`);
+        }
+
+        return await Tweet.findByIdAndDelete(tweetId)
     }
 
 }

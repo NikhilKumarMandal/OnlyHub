@@ -13,5 +13,6 @@ const tweetController = new TweetController(tweetService,logger)
 router.post("/create-tweet",tweetController.createTweet)
 router.get("/user-tweet",tweetController.getUserTweets)
 router.get("/update-tweet/:id",tweetController.updateTweet)
+router.delete("/delete-tweet/:id",tweetController.deleteTweet)
 
 export default router
