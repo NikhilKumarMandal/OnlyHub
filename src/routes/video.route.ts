@@ -29,7 +29,7 @@ router.post(
     videoController.pulishAVideo
 )
 
-router.post(
+router.patch(
     "/video-update/:id",
     verifyJWT,
     upload.fields([
@@ -45,6 +45,12 @@ router.delete(
     "/video-delete/:id",
     verifyJWT,
     videoController.deleteVideo
+)
+
+router.get(
+    "/:id",
+    verifyJWT,
+    videoController.getVideoById
 )
 
 

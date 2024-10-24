@@ -1,7 +1,7 @@
 import { Video } from "../models/video.model.js";
 import { UpdateVideoData, VideoData } from "../types/type.js";
 import { ApiError } from "../utils/ApiError.js";
-
+import mongoose, {isValidObjectId} from "mongoose"
 
 
 export class VideoService{
@@ -38,5 +38,12 @@ export class VideoService{
     }
 
     return deletedVideo;
+    }
+
+    async getVideoById(videoId: string) {
+        if (!isValidObjectId(videoId)) {
+            throw new ApiError(400,"This is not a valid id:")
+        }
+        return await Video.findById(videoId)
     }
 }

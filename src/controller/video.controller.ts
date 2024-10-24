@@ -112,4 +112,18 @@ export class VideoController{
     );
     })
 
+    getVideoById = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        
+        const video = await this.videoService.getVideoById(id)
+
+        res.status(200).json(
+            new ApiResponse(
+                200,
+                video,
+                "Video fected successfully"
+            ))
+
+    })
+
 }
