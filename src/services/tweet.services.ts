@@ -16,6 +16,31 @@ export class TweetService{
         throw new ApiError(400, `This is not a valid id: ${userId}`);
     }
         return await Tweet.find({ owner: userId });
+    };
+
+    
+    async update(tweetId: string,content:string) {
+
+        if (!isValidObjectId(tweetId)) {
+        throw new ApiError(400, `This is not a valid id: ${tweetId}`);
+        }
+
+        const  tweet =  (await Tweet.findByIdAndUpdate(
+            tweetId ,
+            {
+                $set: {
+                    content
+                }
+            },
+            {
+                new: true
+            }
+        ))
+
+        if (!tweet) {
+            throw new ApiError(500,"Somthing went wrong")
+        }
+        return tweet
     }
 
 }

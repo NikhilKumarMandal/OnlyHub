@@ -40,8 +40,32 @@ export class TweetController{
 
 
     getUserTweets = asyncHandler(async (req, res) => {
-    console.log('User ID:', req.user?._id);
-    const userTweet = await this.tweetService.userTweet(req.user?._id as string);
-    res.status(200).json(new ApiResponse(200, userTweet, "Fetched user Tweets"));
+        const userTweet = await this.tweetService.userTweet(req.user?._id as string);
+        
+        res.status(200).json(
+        new ApiResponse(
+            200,
+            userTweet,
+            "Fetched user Tweets"
+        ));
     });
+
+    updateTweet = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        const { content } = req.body;
+
+        if (!content) {
+        throw new ApiError(400, "Content is required!");
+        }
+
+        const updatedTweet = await this.tweetService.update(id, content)
+
+        res.status(200).json(
+            new ApiResponse(
+                200,
+                updatedTweet,
+                "Tweet updated successfully"
+        ))
+        
+    })
 }
