@@ -24,4 +24,12 @@ export class CommentService{
             }
         )
     }
+
+    async delete(commentId: string) {
+        const comment = await Comment.findByIdAndDelete(commentId);
+        if (!comment) {
+            throw new ApiError(400,"Comment not found")
+        }
+        return comment;
+    }
 }

@@ -59,7 +59,7 @@ export class CommentController{
         if (!isValidObjectId(id)) {
             throw new ApiError(400,"This is not a valid id:")
         }
-        
+
         if (!content) {
             throw new ApiError(400,"Content is requried!")
         }
@@ -71,6 +71,24 @@ export class CommentController{
                 200,
                 comment,
                 "Comment updated successfully"
+            ))
+    })
+
+    deleteComment = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+
+        if (!isValidObjectId(id)) {
+            throw new ApiError(400,"This is not a valid id:")
+        }
+
+        await this.commentService.delete(id);
+        
+        this.logger.info("Comment deleted successfully!");
+        res.status(200).json(
+            new ApiResponse(
+                200,
+                {},
+                "Comment deleted successfully!"
             ))
     })
 }
