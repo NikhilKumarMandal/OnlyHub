@@ -11,9 +11,10 @@ router.use(verifyJWT)
 const commentService = new CommentService
 const commentController = new CommentController(commentService,logger)
 
-router.post("/add-comment/:id",commentController.addComment)
-router.patch("/update-comment/:id",commentController.updateComment)
-router.delete("/delete-comment/:id",commentController.deleteComment)
+router.post("/add-comment/:id", commentController.addComment);
+router.patch("/update-comment/:id", commentController.updateComment);
+router.delete("/delete-comment/:id", commentController.deleteComment);
+router.get("/video-comment/:id", commentController.getVideoComments);
 
 
 export default router

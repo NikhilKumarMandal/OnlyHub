@@ -13,7 +13,21 @@ export class CommentController{
     ) { }
 
     getVideoComments = asyncHandler(async (req, res) => {
-        
+        const { id } = req.params
+    
+        const comment = await this.commentService.index(
+            id as string,
+            {
+            page: req.query.page ? parseInt(req.query.page as string) : 1,
+            limit: req.query.limit ? parseInt(req.query.limit as string) : 10,
+            },
+        )
+
+        res.status(200).json(new ApiResponse(
+            200,
+            comment,
+            "Comment fected particular video"
+        ))
     })
 
     addComment = asyncHandler(async (req, res) => {
