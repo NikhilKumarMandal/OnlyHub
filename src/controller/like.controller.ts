@@ -120,4 +120,25 @@ export class LikeController{
         ));
     })
 
+    getLikedVideos = asyncHandler(async (req, res) => {
+        
+        const userId = req.user?._id as string;
+
+        if (!isValidObjectId(userId)) {
+            throw new ApiError(400,"This is not a valid id:")
+        }
+
+        const likedVideo = await this.likeService.likedVideo(userId);
+
+        if (!likedVideo.length) {
+            throw new ApiError(400,"There is no liked video available")
+        }
+
+        res.status(200).json(new ApiResponse(
+            200,
+            likedVideo,
+            "Fected liked videos successfully"
+        ))
+    })
+
 }

@@ -1,3 +1,4 @@
+import mongoose from "mongoose"
 import { Like } from "../models/like.model.js"
 
 
@@ -66,5 +67,29 @@ export class LikeService{
             tweet: tweetId,
             likedBy: userId
         })
+    }
+
+    async likedVideo(userId: string) {
+        return Like.aggregate([
+            {
+                $match: {
+                    likedBy: new mongoose.Types.ObjectId(userId),
+                    video: {
+                        $exists: true
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: "videos",
+                    localField: "video",
+                    foreignField: "_id",
+                    as: "likedVideo",
+                }
+            },
+            {
+                $unwind: "$likedVideo"
+            }
+        ])
     }
 }
