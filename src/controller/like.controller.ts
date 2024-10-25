@@ -13,7 +13,8 @@ export class LikeController{
     constructor(
         private likeService: LikeService,
         private logger: Logger
-    ){}
+    ) { }
+    
     toggleVideoLike = asyncHandler(async(req, res) => {
     const { id } = req.params;
 
@@ -44,5 +45,36 @@ export class LikeController{
         
     res.status(200).json(new ApiResponse(200, like, "Liked successfully!"));
     });
+
+    toggleCommentLike = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    if (!isValidObjectId) {
+        throw new ApiError(400,"This is not a valid comment id:")
+    }
+
+    const userId = req.user?._id as string;
+
+    if (!isValidObjectId(userId)) {
+        throw new ApiError(400, "This is not a valid user id");
+    }
+
+    const isAlreadyLiked = await this.likeService.toggle(id, userId);
+
+    if (isAlreadyLiked) {
+        const removeLike = await this.likeService.findAndDeleted(id, userId);
+
+        res.status(200).json(new ApiResponse(
+            200,
+            removeLike,
+            "Unliked comment successfully"
+        ));
+        return;
+    }
+
+    const like = await this.likeService.create(id, userId);
+        
+    res.status(200).json(new ApiResponse(200, like, "Liked comment successfully!"));
+    })
 
 }

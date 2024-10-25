@@ -10,7 +10,9 @@ router.use(verifyJWT);
 const likeService = new LikeService();
 const likeController = new LikeController(likeService,logger)
 
-
+//id -> videoID
 router.post("/video-like/:id", likeController.toggleVideoLike)
+//id-> commentID
+router.post("/comment-like/:id", likeController.toggleCommentLike)
 
 export default router;
