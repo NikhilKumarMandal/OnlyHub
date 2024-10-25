@@ -14,5 +14,6 @@ const userSerive = new UserService()
 const subController = new SubscriptionController(userSerive,subService,logger)
 
 router.post("/subscribe/:id",subController.toggleSubscription)
+router.get("/channelInfo/:id",subController.getUserChannelSubscribers)
 
 export default router

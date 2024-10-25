@@ -2,6 +2,7 @@ import { Subscription } from "../models/subscription.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/auth.model.js";
 import { ISubscription } from "../types/type.js";
+import mongoose from "mongoose";
 
 
 
@@ -27,5 +28,40 @@ export class SubscriptionService{
             channel: channelId,
             subscriber: userId
         })
+    }
+
+    async channelToSub(channelId: string) {
+        
+        return Subscription.aggregate([
+            {
+                $match: {
+                    channel: new mongoose.Types.ObjectId(channelId)
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "subscriber",
+                    foreignField: "_id",
+                    as: "subscriberInfo",
+                    pipeline: [
+                        {
+                            $project: {
+                                username: 1,
+                                avatar:1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $unwind: "$subscriberInfo"
+            },
+            {
+                $project: {
+                    subscriberInfo: 1
+                }
+            }
+        ])
     }
 }

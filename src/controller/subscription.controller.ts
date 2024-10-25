@@ -52,6 +52,21 @@ export class SubscriptionController{
                 },
                 "Subscribed successfull"
         ))
-        
+    })
+
+    getUserChannelSubscribers = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+
+        if (!isValidObjectId(id)) {
+            throw new ApiError(400,"This is not a valid id:")
+        }
+
+        const channelInfo = await this.subService.channelToSub(id)
+
+        if (!channelInfo.length) {
+            throw new ApiError(404,"Channel does not found")
+        }
+
+        res.status(200).json(new ApiResponse(200,channelInfo,"Channel info fected successfulyy"))
     })
 }
