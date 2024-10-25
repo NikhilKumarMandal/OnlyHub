@@ -47,3 +47,8 @@ export interface IComment{
     video: string;
     owner: string;
 }
+
+export interface ISubscription{
+    channel: string;
+    subscriber: string
+}
