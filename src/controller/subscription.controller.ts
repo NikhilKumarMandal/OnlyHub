@@ -69,4 +69,21 @@ export class SubscriptionController{
 
         res.status(200).json(new ApiResponse(200,channelInfo,"Channel info fected successfulyy"))
     })
+
+    getSubscribedChannels = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+
+        if (!isValidObjectId(id)) {
+            throw new ApiError(400,"This is not valid id:")
+        }
+
+        const subChannel = await this.subService.userSubChannel(id)
+
+        if (!subChannel.length) {
+            throw new ApiError(404,"No sub channel found")
+        }
+
+        res.status(200).json(new ApiResponse(200,subChannel,"successfully fected data "))
+
+    })
 }

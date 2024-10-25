@@ -64,4 +64,38 @@ export class SubscriptionService{
             }
         ])
     }
+
+    async userSubChannel(subId: string){
+        return Subscription.aggregate([
+            {
+                $match: {
+                    subscriber: new mongoose.Types.ObjectId(subId)
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "channel",
+                    foreignField: "_id",
+                    as: "subscribedChannels",
+                    pipeline: [
+                        {
+                            $project: {
+                                username: 1,
+                                avatar: 1
+                            }
+                        }
+                    ]
+                } 
+            },
+            {
+                $unwind: "$subscribedChannels"
+            },
+            {
+                $project: {
+                    subscribedChannels: 1
+                }
+            }
+        ])
+    }
 }
