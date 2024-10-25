@@ -42,6 +42,7 @@ export class SubscriptionController{
                 },
                 "UnSubscribed successfull"
             ))
+            return;
         } 
             
         await this.subService.create(id, userId);
