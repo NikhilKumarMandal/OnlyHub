@@ -28,10 +28,10 @@ export class LikeController{
         throw new ApiError(400, "This is not a valid user id");
     }
 
-    const isAlreadyLiked = await this.likeService.toggle(id, userId);
+    const isAlreadyLiked = await this.likeService.toggleVideo(id, userId);
 
     if (isAlreadyLiked) {
-        const removeLike = await this.likeService.findAndDeleted(id, userId);
+        const removeLike = await this.likeService.findAndDeletedVideo(id, userId);
 
         res.status(200).json(new ApiResponse(
             200,
@@ -41,15 +41,19 @@ export class LikeController{
         return;
     }
 
-    const like = await this.likeService.create(id, userId);
+    const like = await this.likeService.createVideo(id, userId);
         
-    res.status(200).json(new ApiResponse(200, like, "Liked successfully!"));
+        res.status(200).json(new ApiResponse(
+            200,
+            like,
+            "Liked successfully!"
+        ));
     });
 
     toggleCommentLike = asyncHandler(async (req, res) => {
     const { id } = req.params;
 
-    if (!isValidObjectId) {
+    if (!isValidObjectId(id)) {
         throw new ApiError(400,"This is not a valid comment id:")
     }
 
@@ -59,10 +63,10 @@ export class LikeController{
         throw new ApiError(400, "This is not a valid user id");
     }
 
-    const isAlreadyLiked = await this.likeService.toggle(id, userId);
+    const isAlreadyLiked = await this.likeService.toggleComment(id, userId);
 
     if (isAlreadyLiked) {
-        const removeLike = await this.likeService.findAndDeleted(id, userId);
+        const removeLike = await this.likeService.findAndDeletedComment(id, userId);
 
         res.status(200).json(new ApiResponse(
             200,
@@ -72,9 +76,48 @@ export class LikeController{
         return;
     }
 
-    const like = await this.likeService.create(id, userId);
+    const like = await this.likeService.createComment(id, userId);
         
-    res.status(200).json(new ApiResponse(200, like, "Liked comment successfully!"));
+        res.status(200).json(new ApiResponse(
+            200,
+            like,
+            "Liked comment successfully!"
+        ));
+    })
+
+    toggleTweetLike = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
+        throw new ApiError(400,"This is not a valid comment id:")
+    }
+
+    const userId = req.user?._id as string;
+
+    if (!isValidObjectId(userId)) {
+        throw new ApiError(400, "This is not a valid user id");
+    }
+
+    const isAlreadyLiked = await this.likeService.toggleTweet(id, userId);
+
+    if (isAlreadyLiked) {
+        const removeLike = await this.likeService.findAndDeletedTweet(id, userId);
+
+        res.status(200).json(new ApiResponse(
+            200,
+            removeLike,
+            "Unliked tweet successfully"
+        ));
+        return;
+    }
+
+    const like = await this.likeService.createTweet(id, userId);
+        
+        res.status(200).json(new ApiResponse(
+            200,
+            like,
+            "Liked tweet successfully!"
+        ));
     })
 
 }

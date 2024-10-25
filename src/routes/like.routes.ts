@@ -14,5 +14,7 @@ const likeController = new LikeController(likeService,logger)
 router.post("/video-like/:id", likeController.toggleVideoLike)
 //id-> commentID
 router.post("/comment-like/:id", likeController.toggleCommentLike)
+//id -> tweetID
+router.post("/tweet-like/:id", likeController.toggleTweetLike)
 
 export default router;
