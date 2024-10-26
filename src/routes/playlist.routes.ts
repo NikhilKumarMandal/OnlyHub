@@ -22,4 +22,6 @@ router.post("/playlist/:playlistId/:videoId", playlistController.addVideoToPlayl
 router.patch("/playlist/:playlistId/:videoId", playlistController.removeVideoFromPlaylist);
 router.delete("/playlist-delete/:playlistId", playlistController.deletePlaylist);
 
+router.patch("/playlist-update/:playlistId", playlistController.updatePlaylist);
+
 export default router

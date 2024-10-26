@@ -155,6 +155,33 @@ export class PlaylistController{
         }
 
 
-        res.status(200).json(new ApiResponse(200,{},"Playlist deleted successfully"))
+        res.status(200).json(new ApiResponse(
+            200,
+            {},
+            "Playlist deleted successfully"
+        ))
+    })
+
+    updatePlaylist = asyncHandler(async (req, res) => {
+        const { playlistId } = req.params;
+        const { name, description } = req.body;
+
+
+        if (!isValidObjectId(playlistId)) {
+            throw new ApiResponse(400, "This is not a valid playlistId");
+        }
+
+        const updatedPlayList = await this.playlistService.findByIdAndUpdatePlaylistDetails(playlistId, name, description);
+
+        if (!updatedPlayList) {
+            throw new ApiError(500,"Somthing went while updating the details")
+        }
+
+        res.status(200).json(new ApiResponse(
+            200,
+            updatedPlayList,
+            "Playlist updatd successfully"
+        ))
+
     })
 }

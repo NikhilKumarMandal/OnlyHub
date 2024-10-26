@@ -51,11 +51,27 @@ export class PlaylistService{
     );
     };
 
-    async findByIdAndDelete(playlistId: string,userId:string) {
-        return await Playlist.findOneAndDelete({
-            _id: playlistId,
-            owner: userId
-        })
+    async findByIdAndDelete(playlistId: string, userId: string) {
+    return await Playlist.findOneAndDelete({
+        _id: playlistId, // Change from playlistId to _id
+        owner: userId
+    });
+    }
+
+
+    async findByIdAndUpdatePlaylistDetails(playlistId: string,name: string,description:string) {
+        return await Playlist.findByIdAndUpdate(
+            playlistId,
+            {
+                $set: {
+                    name,
+                    description
+                }
+            },
+            {
+                new: true
+            }
+        )
     }
 
 }
