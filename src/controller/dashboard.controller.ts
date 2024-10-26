@@ -35,4 +35,29 @@ export class DashboardController {
         ))
 
     })
+
+    getChannelVideos = asyncHandler(async (req, res) => {
+        const channelId = req.user?._id as string;
+
+        if (!isValidObjectId(channelId)) {
+            throw new ApiError(400,"This is not a valid userId:")
+        }
+
+        const video = await this.dashboardService.totalVideo(channelId);
+
+        if (!video.length) {
+            res.status(200).json(new ApiResponse(
+                200,
+                [],
+                "No videos found for this channel."
+            ));
+            return
+        }
+
+        res.status(200).json(new ApiResponse(
+            200,
+            video,
+            "Video fected successfully"
+        ))
+    })
 }

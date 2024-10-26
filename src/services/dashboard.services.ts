@@ -69,6 +69,13 @@ export class DashboardService{
             }
         ])
     }
+
+    async totalVideo(userId: string) {
+        
+        return await Video.find({
+            owner: userId
+        })
+    }
 }
 
 

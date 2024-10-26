@@ -9,6 +9,7 @@ const dashboardService = new DashboardService();
 
 const dashboardController = new DashboardController(dashboardService);
 router.get("/dashboard-stats",dashboardController.getChannelStats)
+router.get("/dashboard-video",dashboardController.getChannelVideos)
 
 
 export default router;
