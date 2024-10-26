@@ -16,5 +16,6 @@ router.post("/create-playlist", playlistController.createPlaylist);
 router.get("/user-playlist/:id", playlistController.getUserPlaylists);
 // id -> playlistId
 router.get("/playlist/:id", playlistController.           getUserPlaylists);
+router.post("/playlist/:playlistId/:videoId", playlistController.addVideoToPlaylist);
 
 export default router

@@ -21,4 +21,18 @@ export class PlaylistService{
     async findById(playlistId: string) {
         return await Playlist.findById(playlistId)
     }
+
+    async findByIdAndUpdate(playlistId: string, videoId: string) {
+        return await Playlist.findByIdAndUpdate(
+            playlistId,
+            {
+                $push: {
+                    videos: videoId
+                }
+            },
+            {
+                new: true
+            }
+        )
+    }
 }

@@ -83,4 +83,20 @@ export class PlaylistController{
             "userPlaylist fected successfully"
         ))
     })
+
+    addVideoToPlaylist = asyncHandler(async (req, res) => {
+        const { playlistId, videoId } = req.params;
+
+        if (!isValidObjectId(playlistId)) {
+            throw new ApiError(400,"This is not a  valid playListedId:")
+        }
+
+        if (!isValidObjectId(videoId)) {
+            throw new ApiError(400,"This is not a valid video id:")
+        }
+
+        const pushVideo = await this.playlistService.findByIdAndUpdate(playlistId, videoId)
+        
+        res.status(200).json(new ApiResponse(200,pushVideo,"Video is push in the palylist"))
+    })
 }
