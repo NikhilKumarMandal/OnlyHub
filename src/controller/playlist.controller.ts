@@ -3,6 +3,7 @@ import { PlaylistService } from "../services/playlist.services.js";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { isValidObjectId } from "mongoose";
 
 
 
@@ -24,10 +25,12 @@ export class PlaylistController{
     if (!description) {
         throw new ApiError(400,"description is required!")
     }
-        
+
+        const userId = req.user?._id as string
         const playlistDetails = {
             name,
-            description   
+            description,
+            owner: userId
         }
         
         const playlist = await this.playlistService.create(playlistDetails);
@@ -38,6 +41,26 @@ export class PlaylistController{
             200,
             playlist,
             "Playlist created successfulyy"
+        ))
+    })
+
+    getUserPlaylists = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+
+        if (!isValidObjectId(id)) {
+            throw new ApiError(400,"This is not a valid id:")
+        }
+
+        const playlist = await this.playlistService.findById(id);
+
+        if (!playlist) {
+            throw new ApiError(404,"UserPlaylist does not found or user playlist does not exist")
+        }
+
+        res.status(200).json(new ApiResponse(
+            200,
+            playlist,
+            "Fected Playlist!"
         ))
     })
 }

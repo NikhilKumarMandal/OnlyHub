@@ -11,4 +11,10 @@ export class PlaylistService{
         const playlist = await new Playlist(playlistDetails);
         return await playlist.save();
     }
+
+    async findById(userId: string) {
+        return await Playlist.find({
+            owner: userId
+        })
+    }
 }

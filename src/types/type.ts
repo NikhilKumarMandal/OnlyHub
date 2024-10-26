@@ -56,4 +56,5 @@ export interface ISubscription{
 export interface IPlaylist{
     name: string;
     description: string;
+    owner: string
 }
