@@ -52,3 +52,8 @@ export interface ISubscription{
     channel: string;
     subscriber: string
 }
+
+export interface IPlaylist{
+    name: string;
+    description: string;
+}
