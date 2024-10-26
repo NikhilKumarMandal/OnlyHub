@@ -15,9 +15,11 @@ router.post("/create-playlist", playlistController.createPlaylist);
 // id-> userId
 router.get("/user-playlist/:id", playlistController.getUserPlaylists);
 // id -> playlistId
-router.get("/playlist/:id", playlistController.           getUserPlaylists);
+router.get("/playlist/:id", playlistController.getPlaylistById);
+
 router.post("/playlist/:playlistId/:videoId", playlistController.addVideoToPlaylist);
 
 router.patch("/playlist/:playlistId/:videoId", playlistController.removeVideoFromPlaylist);
+router.delete("/playlist-delete/:playlistId", playlistController.deletePlaylist);
 
 export default router

@@ -37,7 +37,7 @@ export class PlaylistService{
         )
     }
 
-    async findByIdAndDelete(playlistId: string, videoId: string) {
+    async findByIdAndUpdatePlaylist(playlistId: string, videoId: string) {
     const objectIdVideoId = new mongoose.Types.ObjectId(videoId); 
 
     return await Playlist.findByIdAndUpdate(
@@ -49,6 +49,13 @@ export class PlaylistService{
         },  
         { new: true }
     );
+    };
+
+    async findByIdAndDelete(playlistId: string,userId:string) {
+        return await Playlist.findOneAndDelete({
+            _id: playlistId,
+            owner: userId
+        })
     }
 
 }

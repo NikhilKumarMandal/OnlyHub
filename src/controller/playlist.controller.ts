@@ -65,24 +65,28 @@ export class PlaylistController{
     })
 
     getPlaylistById = asyncHandler(async (req, res) => {
-        const { id } = req.params;
+    const { id } = req.params;
 
-        if (!isValidObjectId(id)) {
-            throw new ApiError(400,"This is not a valid id:")
-        }
+    if (!isValidObjectId(id)) {
+        throw new ApiError(400, "This is not a valid id:");
+    }
 
-        const playlist = await this.playlistService.findById(id)
-        if (!playlist) {
-        throw new ApiError(404,"UserPlaylist does not found or user playlist does not exist")
-        }
-        res.status(200)
-        .json(
+    const playlist = await this.playlistService.findById(id);
+    
+    console.log("Fetched playlist:", playlist);
+    
+    if (!playlist) {
+        throw new ApiError(404, "UserPlaylist does not exist or was not found.");
+    }
+
+    res.status(200).json(
         new ApiResponse(
             200,
             playlist,
-            "userPlaylist fected successfully"
-        ))
-    })
+            "UserPlaylist fetched successfully"
+        ));
+    });
+
 
     addVideoToPlaylist = asyncHandler(async (req, res) => {
         const { playlistId, videoId } = req.params;
@@ -117,7 +121,7 @@ export class PlaylistController{
             throw new ApiError(400,"This is not a valid video id:")
         }
 
-        const playlist = await this.playlistService.findByIdAndDelete(playlistId, videoId);
+        const playlist = await this.playlistService.findByIdAndUpdatePlaylist(playlistId, videoId);
         console.log(playlist);
         
         
@@ -130,5 +134,27 @@ export class PlaylistController{
             playlist,
             "Remove video from playlist successfully"
             ))
+    })
+
+    deletePlaylist = asyncHandler(async (req, res) => {
+        const { playlistId } = req.params;
+        if (!isValidObjectId(playlistId)) {
+            throw new ApiError(400,"This is not a  valid playListedId:")
+        }
+        const userId = req.user?._id as string;
+
+         if (!isValidObjectId(userId)) {
+            throw new ApiError(400,"This is not a  valid userId:")
+        }
+
+        const deletedPlaylist = await this.playlistService.findByIdAndDelete(playlistId, userId);
+
+
+        if (!deletedPlaylist) {
+        throw new ApiError(404, "Playlist not found or user is not the owner.");
+        }
+
+
+        res.status(200).json(new ApiResponse(200,{},"Playlist deleted successfully"))
     })
 }
