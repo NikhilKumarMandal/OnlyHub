@@ -97,6 +97,38 @@ export class PlaylistController{
 
         const pushVideo = await this.playlistService.findByIdAndUpdate(playlistId, videoId)
         
-        res.status(200).json(new ApiResponse(200,pushVideo,"Video is push in the palylist"))
+        res.status(200).json(new ApiResponse(
+            200,
+            pushVideo,
+            "Video is push in the palylist"
+        ))
+    })
+
+    removeVideoFromPlaylist = asyncHandler(async (req, res) => {
+        const { playlistId, videoId } = req.params;
+
+        if (!isValidObjectId(playlistId)) {
+            throw new ApiError(400,"This is not a  valid playListedId:")
+        }
+
+        console.log(playlistId);
+        
+        if (!isValidObjectId(videoId)) {
+            throw new ApiError(400,"This is not a valid video id:")
+        }
+
+        const playlist = await this.playlistService.findByIdAndDelete(playlistId, videoId);
+        console.log(playlist);
+        
+        
+        if (!playlist) {
+        throw new ApiError(401,"Something went wrong")
+        }
+
+        res.status(200).json(new ApiResponse(
+            200,
+            playlist,
+            "Remove video from playlist successfully"
+            ))
     })
 }

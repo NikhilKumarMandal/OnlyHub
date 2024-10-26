@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Playlist } from "../models/playlist.model.js";
 import { IPlaylist } from "../types/type.js";
 import { ApiError } from "../utils/ApiError.js";
@@ -35,4 +36,19 @@ export class PlaylistService{
             }
         )
     }
+
+    async findByIdAndDelete(playlistId: string, videoId: string) {
+    const objectIdVideoId = new mongoose.Types.ObjectId(videoId); 
+
+    return await Playlist.findByIdAndUpdate(
+        playlistId,
+        {
+            $pull: {
+                videos: objectIdVideoId
+            }
+        },  
+        { new: true }
+    );
+    }
+
 }

@@ -18,4 +18,6 @@ router.get("/user-playlist/:id", playlistController.getUserPlaylists);
 router.get("/playlist/:id", playlistController.           getUserPlaylists);
 router.post("/playlist/:playlistId/:videoId", playlistController.addVideoToPlaylist);
 
+router.patch("/playlist/:playlistId/:videoId", playlistController.removeVideoFromPlaylist);
+
 export default router
