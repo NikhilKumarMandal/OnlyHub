@@ -12,9 +12,13 @@ export class PlaylistService{
         return await playlist.save();
     }
 
-    async findById(userId: string) {
+    async findPlaylist(userId: string) {
         return await Playlist.find({
             owner: userId
         })
+    }
+
+    async findById(playlistId: string) {
+        return await Playlist.findById(playlistId)
     }
 }

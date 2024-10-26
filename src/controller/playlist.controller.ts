@@ -51,7 +51,7 @@ export class PlaylistController{
             throw new ApiError(400,"This is not a valid id:")
         }
 
-        const playlist = await this.playlistService.findById(id);
+        const playlist = await this.playlistService.findPlaylist(id);
 
         if (!playlist) {
             throw new ApiError(404,"UserPlaylist does not found or user playlist does not exist")
@@ -61,6 +61,26 @@ export class PlaylistController{
             200,
             playlist,
             "Fected Playlist!"
+        ))
+    })
+
+    getPlaylistById = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+
+        if (!isValidObjectId(id)) {
+            throw new ApiError(400,"This is not a valid id:")
+        }
+
+        const playlist = await this.playlistService.findById(id)
+        if (!playlist) {
+        throw new ApiError(404,"UserPlaylist does not found or user playlist does not exist")
+        }
+        res.status(200)
+        .json(
+        new ApiResponse(
+            200,
+            playlist,
+            "userPlaylist fected successfully"
         ))
     })
 }

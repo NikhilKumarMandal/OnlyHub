@@ -13,6 +13,8 @@ const playlistController = new PlaylistController(playlistService,logger)
 
 router.post("/create-playlist", playlistController.createPlaylist);
 // id-> userId
-router.get("/user-playlist/:id", playlistController.           getUserPlaylists);
+router.get("/user-playlist/:id", playlistController.getUserPlaylists);
+// id -> playlistId
+router.get("/playlist/:id", playlistController.           getUserPlaylists);
 
 export default router
