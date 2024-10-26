@@ -10,6 +10,7 @@ import commentRouter from "./routes/comment.routes.js"
 import subRouter from "./routes/subscription.routes.js"
 import likeRouter from "./routes/like.routes.js"
 import playlistRouter from "./routes/playlist.routes.js"
+import healthcheckRouter from "./routes/healthcheck.routes.js"
 
 const app: Application = express()
 const morganFormat = ":method :url :status :response-time ms";
@@ -32,6 +33,7 @@ app.use("/api/v1/comment",commentRouter );
 app.use("/api/v1/sub",subRouter );
 app.use("/api/v1/like",likeRouter );
 app.use("/api/v1/playlist",playlistRouter);
+app.use("/api/v1/healthcheck",healthcheckRouter);
 
 
 app.use(
