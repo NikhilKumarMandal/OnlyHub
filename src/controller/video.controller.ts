@@ -5,13 +5,15 @@ import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { asyncHandler } from "../utils/asyncHandler.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
+import { NotificationService } from "../services/notification.services.js"
+import { SubscriptionService } from "../services/subscription.services.js"
 
 
 export class VideoController{
 
     constructor(
         private videoService: VideoService,
-        private logger: Logger
+        private logger: Logger,
     ) { }
 
     index = asyncHandler(async (req, res) => {
@@ -77,9 +79,15 @@ export class VideoController{
             duration: videoFile.duration
         } as VideoData)
 
-        this.logger.info("Video uploaded successfully",{_id: uploadedVideo._id})
-        
-        res.status(200).json(new ApiResponse(200, uploadedVideo, "Video is uploaded successfully"));
+        this.logger.info("Video uploaded successfully", { _id: uploadedVideo._id });
+
+      
+
+        res.status(200).json(new ApiResponse(
+            200,
+            uploadedVideo,
+            "Video is uploaded successfully"
+        ));
     })
 
     updateVideo = asyncHandler(async (req, res) => {

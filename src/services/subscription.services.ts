@@ -31,39 +31,36 @@ export class SubscriptionService{
     }
 
     async channelToSub(channelId: string) {
-        
-        return Subscription.aggregate([
-            {
-                $match: {
-                    channel: new mongoose.Types.ObjectId(channelId)
-                }
-            },
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "subscriber",
-                    foreignField: "_id",
-                    as: "subscriberInfo",
-                    pipeline: [
-                        {
-                            $project: {
-                                username: 1,
-                                avatar:1
-                            }
-                        }
-                    ]
-                }
-            },
-            {
-                $unwind: "$subscriberInfo"
-            },
-            {
-                $project: {
-                    subscriberInfo: 1
-                }
+    return Subscription.aggregate([
+        {
+            $match: {
+                channel: new mongoose.Types.ObjectId(channelId)
             }
-        ])
-    }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "subscriber",
+                foreignField: "_id",
+                as: "subscriberInfo",
+                pipeline: [
+                    {
+                        $project: {
+                            username: 1,
+                            avatar: 1
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $project: {
+                subscriberInfo: 1
+            }
+        }
+    ]);
+}
+
 
     async userSubChannel(subId: string){
         return Subscription.aggregate([
@@ -98,4 +95,41 @@ export class SubscriptionService{
             }
         ])
     }
+
+
+    async getSubscribers(channelId: string) {
+    return Subscription.aggregate([
+        {
+            $match: { channel: new mongoose.Types.ObjectId(channelId) }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'subscriber',
+                foreignField: '_id',
+                as: 'subscriberInfo',
+                pipeline: [
+                    {
+                        $project: {
+                            userId: '$_id', 
+                            username: 1,
+                            avatar: 1
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $unwind: '$subscriberInfo'
+        },
+        {
+            $project: {
+                userId: '$subscriberInfo.userId', 
+                username: '$subscriberInfo.username',
+                avatar: '$subscriberInfo.avatar'
+            }
+        }
+    ]);
+    }
+
 }

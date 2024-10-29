@@ -1,6 +1,7 @@
 import express, { Application } from "express"
 import logger from "./utils/logger.js";
 import morgan from "morgan";
+import http from 'http';
 import cookieParser from "cookie-parser"
 import cors from "cors"
 import userRouter from "./routes/user.routes.js"
@@ -16,15 +17,24 @@ import dashboardRouter from "./routes/dashboard.routes.js"
 const app: Application = express()
 const morganFormat = ":method :url :status :response-time ms";
 
-app.use(express.json());
 
+
+
+
+
+
+
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 
-app.use(cors({
-    origin: "*"
-}));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_ENDPOINT,
+    credentials: true,
+  })
+);
 
 
 app.use("/api/v1/users", userRouter);
