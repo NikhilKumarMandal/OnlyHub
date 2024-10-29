@@ -173,6 +173,16 @@ export class UserController{
             .json(new ApiResponse(200,{},"User logout successfully"))
     })
 
+
+    getCurrentUser = asyncHandler(async (req, res) => {
+        res.status(200).json(
+            new ApiResponse(
+            200,
+            req.user,
+            "User fected successfully"
+        ))
+    })
+
     getUserChannelProfile = asyncHandler(async (req, res) => {
         const { username } = req.params
 
